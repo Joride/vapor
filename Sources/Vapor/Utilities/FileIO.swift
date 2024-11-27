@@ -515,6 +515,12 @@ public struct FileIO: Sendable {
 
         // Respond with lastModified header
         headers.lastModified = HTTPHeaders.LastModified(value: fileInfo.lastDataModificationTime.date)
+        
+        #if DEBUG
+        headers.cacheControl = HTTPHeaders.CacheControl(noCache: true, noStore: true)
+        #else
+        headers.cacheControl = HTTPHeaders.CacheControl()
+        #endif
 
         headers.replaceOrAdd(name: .eTag, value: eTag)
 
